@@ -1,1 +1,1 @@
-# Ceramic_Quality_Inspection
+# Ceramic Quality Inspection System OpenCV Python
