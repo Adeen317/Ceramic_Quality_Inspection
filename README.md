@@ -14,5 +14,5 @@ Python Implementation: All code is written in Python, making it easy to understa
 ### Usage
 To use this system:
 
-Clone the Repository: git clone https://github.com/your-username/tiles-defect-detection.git
+Clone the Repository: git clone https://github.com/Adeen317/Ceramic_Quality_Inspection.git
 Install Dependencies: Ensure you have OpenCV installed (pip install opencv-python)
