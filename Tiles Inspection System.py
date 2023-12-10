@@ -128,7 +128,7 @@ Frame2.place(x=798,y=550)
 #============================================================================================================================================================
 
 #Template Calling
-template_directory="E:\FYP\Template Matching\Spot Dataset"
+template_directory=""
 template_files = [os.path.join(template_directory, filename) for filename in os.listdir(template_directory) if filename.endswith(('.jpg', '.png', '.jpeg'))]
 
 # Initialize an empty list to store template images
@@ -147,7 +147,7 @@ for template_file in template_files:
 #Processing Section
 
 #Capturing Live Video
-cap=cv2.VideoCapture(1)
+
 
 while True:
 
@@ -171,8 +171,7 @@ while True:
     h, w = template.shape[::-1]
     
     #Methods from template matching
-    methods = [cv2.TM_CCOEFF_NORMED,
-            cv2.TM_CCORR_NORMED]
+
 
     #Template Matching Algorithm
     for method in methods:
