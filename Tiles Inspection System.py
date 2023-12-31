@@ -8,6 +8,9 @@ from tkinter import ttk
 from tkinter import scrolledtext
 import time
 import os
+import serial
+
+
 
 #============================================================================================================================================================
 #Functionality
@@ -128,13 +131,18 @@ Frame2.place(x=798,y=550)
 #============================================================================================================================================================
 
 #Template Calling
-template_directory=""
+#spots
+template_directory="E:\FYP\Template Matching\Spot Dataset"
+#Cracks
+template_directory1="E:\FYP\Template Matching\crack_dataset\crack dataset"
 template_files = [os.path.join(template_directory, filename) for filename in os.listdir(template_directory) if filename.endswith(('.jpg', '.png', '.jpeg'))]
+
 
 # Initialize an empty list to store template images
 templates = []
 
 # Load all template images
+#Spots
 for template_file in template_files:
     template = cv2.resize(cv2.imread(template_file,cv2.IMREAD_GRAYSCALE), (0, 0), fx=0.95, fy=0.95)
     if template is not None:
@@ -142,12 +150,15 @@ for template_file in template_files:
     else:
         print(f"Unable to read template image: {template_file}")
 
+
 #============================================================================================================================================================
 
 #Processing Section
 
 #Capturing Live Video
-
+cap=cv2.VideoCapture(1)
+#Hardware section
+arduino = serial.Serial('COM4', 9600) 
 
 while True:
 
@@ -171,14 +182,21 @@ while True:
     h, w = template.shape[::-1]
     
     #Methods from template matching
-
+    methods = [cv2.TM_CCOEFF_NORMED,
+            cv2.TM_CCORR_NORMED]
 
     #Template Matching Algorithm
     for method in methods:
+        #Template Matching
         result = cv2.matchTemplate(invert, template, method)
+        
+        #Min Max Value
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         #print(max_val*100,min_val*100)
+
+        #Maximum Value
         m=round(max_val*100,0)
+        
         #thresh = tk.Label(root, text=(str(m),"%"))
         #thresh.place(x=850,y=600)
         loc2 = np.where(result >= 0.7)
@@ -193,6 +211,16 @@ while True:
             thresh = tk.Label(root, text=(str(m),"%"))
             thresh.place(x=712,y=500)
 
+        if m>70:
+            arduino.write(b'D')  # Sending 'D' to Arduino
+
+        if m<70:
+            arduino.write(b'B')
+
+
+
+
+    #For Edges Of Tiles
     # Find contours
     contours, _ = cv2.findContours(threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
